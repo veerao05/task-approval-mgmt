@@ -1,0 +1,60 @@
+[project]
+name = "task-approval-mgmt"
+version = "0.1.0"
+description = "Task Approval Workflow API"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi==0.135.3",
+    "pydantic==2.12.5",
+    "uvicorn==0.44.0",
+    "starlette",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.0.3",
+    "pytest-asyncio==1.3.0",
+    "httpx==0.28.1",
+    "anyio==4.13.0",
+    "ruff==0.11.2",
+    "mypy==1.15.0",
+    "pre-commit==4.2.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+]
+ignore = ["B008"]  # do not perform function calls in default arguments (FastAPI Depends pattern)
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_decorators = false
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
